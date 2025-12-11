@@ -1,0 +1,186 @@
+/* التخصيصات الرئيسية للتطبيق السوداني */
+:root {
+    --primary-green: #1a4d2e;
+    --sudan-red: #d21034;
+    --sudan-gold: #d4af37;
+    --soil-brown: #8b4513;
+    --nile-blue: #1e90ff;
+}
+
+/* تصميم كروت السودان */
+.sudan-card {
+    border: 2px solid var(--primary-green);
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fff9 100%);
+    transition: all 0.3s ease;
+}
+
+.sudan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(26, 77, 46, 0.15);
+    border-color: var(--sudan-gold);
+}
+
+/* زر السودان */
+.sudan-btn {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.sudan-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--sudan-gold) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sudan-btn:hover::after {
+    opacity: 0.2;
+}
+
+.sudan-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 77, 46, 0.3);
+}
+
+/* شريط التنقل السوداني */
+.sudan-nav {
+    background: linear-gradient(135deg, var(--primary-green) 0%, #0d3b1e 100%);
+    box-shadow: 0 -4px 20px rgba(26, 77, 46, 0.2);
+}
+
+.sudan-nav-btn {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.sudan-nav-btn.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--sudan-gold);
+    transform: translateY(-3px);
+}
+
+/* تخصيص شريط التمرير */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-green);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* تأثيرات النصوص */
+.text-sudan {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--sudan-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* حدود السودان */
+.border-sudan {
+    border: 2px dashed var(--sudan-gold);
+}
+
+/* خلفية نمط سوداني */
+.bg-sudan-pattern {
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(210, 16, 52, 0.1) 0%, transparent 55%),
+        radial-gradient(circle at 75% 75%, rgba(26, 77, 46, 0.1) 0%, transparent 55%);
+    background-size: 50px 50px;
+}
+
+/* تخصيص حقول الإدخال */
+.sudan-input {
+    border: 2px solid #d1d5db;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.sudan-input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.1);
+    outline: none;
+}
+
+/* تخصيص البطاقات الموسمية */
+.season-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.season-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    background: currentColor;
+    opacity: 0.1;
+    border-radius: 0 0 0 100%;
+}
+
+/* تخصيص العلامات */
+.sudan-badge {
+    background: linear-gradient(135deg, var(--sudan-red) 0%, #a50c28 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* تأثيرات الحركة */
+@keyframes sudan-wave {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+.animate-sudan-wave {
+    animation: sudan-wave 2s ease-in-out infinite;
+}
+
+/* تخصيص الجداول */
+.sudan-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.sudan-table th {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+.sudan-table tr:nth-child(even) {
+    background-color: rgba(26, 77, 46, 0.05);
+}
+
+.sudan-table tr:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+}
