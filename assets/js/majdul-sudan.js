@@ -838,6 +838,232 @@ class MajdulSudan {
                 document.getElementById('schedule-modal').classList.add('hidden');
             }
         });
+        // إضافة زر التقويم في النافبار
+renderCalendarButton() {
+    const today = new Date();
+    const monthNames = [
+        'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+    ];
+    
+    return `
+        <button id="calendar-view-btn" class="flex items-center space-x-2 space-x-reverse px-4 py-2 bg-white/20 rounded-lg">
+            <span>${monthNames[today.getMonth()]} ${today.getFullYear()}</span>
+            <i class="fas fa-calendar"></i>
+        </button>
+    `;
+}
+
+showCalendarView() {
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    const monthNames = [
+        'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+    ];
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    
+    let calendarHTML = `
+        <div class="space-y-4">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-800">${monthNames[month]} ${year}</h3>
+                <button onclick="app.showTodaySchedule()" class="px-4 py-2 bg-primary text-white rounded-lg">
+                    اليوم
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-7 gap-1 mb-2">
+                <div class="text-center font-bold text-red-600">أح</div>
+                <div class="text-center font-bold">إث</div>
+                <div class="text-center font-bold">ث</div>
+                <div class="text-center font-bold">أر</div>
+                <div class="text-center font-bold">خ</div>
+                <div class="text-center font-bold">ج</div>
+                <div class="text-center font-bold text-green-600">س</div>
+            </div>
+            
+            <div class="grid grid-cols-7 gap-1">
+    `;
+    
+    // أيام فارغة قبل بداية الشهر
+    for (let i = 0; i < firstDay.getDay(); i++) {
+        calendarHTML += `<div class="h-10"></div>`;
+    }
+    
+    // أيام الشهر
+    const schedules = this.scheduleManager.getAllSchedules();
+    
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const daySchedules = schedules.filter(s => s.date === dateStr);
+        const hasSchedules = daySchedules.length > 0;
+        const isToday = day === today.getDate() && month === today.getMonth();
+        
+        calendarHTML += `
+            <div class="h-10 flex items-center justify-center cursor-pointer 
+                       ${isToday ? 'bg-primary text-white rounded-full' : ''}
+                       ${hasSchedules ? 'relative' : ''}"
+                 onclick="app.showDaySchedule('${dateStr}')">
+                ${day}
+                ${hasSchedules ? `
+                    <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                ` : ''}
+            </div>
+        `;
+    }
+    
+    calendarHTML += `
+            </div>
+            
+            <div class="mt-6">
+                <h4 class="font-bold text-gray-700 mb-3">إجماليات الشهر:</h4>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center p-3 bg-blue-50 rounded-lg">
+                        <div class="text-lg font-bold text-blue-700">${this.getMonthSchedules(month).length}</div>
+                        <div class="text-sm text-blue-600">عدد الجداول</div>
+                    </div>
+                    <div class="text-center p-3 bg-green-50 rounded-lg">
+                        <div class="text-lg font-bold text-green-700">${this.getMonthHours(month)}</div>
+                        <div class="text-sm text-green-600">إجمالي الساعات</div>
+                    </div>
+                    <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                        <div class="text-lg font-bold text-yellow-700">${this.formatCurrency(this.getMonthEarnings(month))}</div>
+                        <div class="text-sm text-yellow-600">الإيرادات</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('modal-content').innerHTML = calendarHTML;
+    document.getElementById('schedule-modal').classList.remove('hidden');
+}
+
+getMonthSchedules(month) {
+    const schedules = this.scheduleManager.getAllSchedules();
+    const year = new Date().getFullYear();
+    
+    return schedules.filter(schedule => {
+        const scheduleDate = new Date(schedule.date);
+        return scheduleDate.getMonth() === month && scheduleDate.getFullYear() === year;
+    });
+}
+
+getMonthHours(month) {
+    const monthSchedules = this.getMonthSchedules(month);
+    return monthSchedules.reduce((sum, schedule) => sum + parseInt(schedule.hours), 0);
+}
+
+getMonthEarnings(month) {
+    const monthSchedules = this.getMonthSchedules(month);
+    return monthSchedules.reduce((sum, schedule) => sum + (schedule.totalAmount || 0), 0);
+}
+
+showDaySchedule(dateStr) {
+    const schedules = this.scheduleManager.getAllSchedules();
+    const daySchedules = schedules.filter(s => s.date === dateStr);
+    const date = new Date(dateStr);
+    
+    if (daySchedules.length === 0) {
+        document.getElementById('modal-content').innerHTML = `
+            <div class="text-center py-8">
+                <i class="fas fa-calendar-day text-gray-300 text-5xl mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-500">لا توجد جداول</h3>
+                <p class="text-gray-400 mt-2">${this.sudanCalendar.formatDate(date, 'full')}</p>
+                <button onclick="app.addScheduleForDate('${dateStr}')" 
+                        class="mt-6 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-all">
+                    <i class="fas fa-plus ml-2"></i>
+                    إضافة جدول لهذا اليوم
+                </button>
+            </div>
+        `;
+    } else {
+        let totalHours = 0;
+        let totalAmount = 0;
+        
+        document.getElementById('modal-content').innerHTML = `
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-gray-800 text-center">
+                    ${this.sudanCalendar.formatDate(date, 'full')}
+                </h3>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-blue-700">${daySchedules.length}</div>
+                            <div class="text-sm text-blue-600">عدد الجداول</div>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-green-700">${daySchedules.reduce((sum, s) => sum + parseInt(s.hours), 0)}</div>
+                            <div class="text-sm text-green-600">إجمالي الساعات</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    ${daySchedules.map(schedule => {
+                        totalHours += parseInt(schedule.hours);
+                        totalAmount += (schedule.totalAmount || 0);
+                        
+                        return `
+                            <div class="p-3 border border-gray-200 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-bold text-gray-800">${schedule.customerName}</h4>
+                                    <span class="px-2 py-1 text-xs rounded ${
+                                        schedule.paymentStatus === 'مدفوع' ? 'bg-green-100 text-green-800' :
+                                        schedule.paymentStatus === 'آجل' ? 'bg-red-100 text-red-800' :
+                                        'bg-yellow-100 text-yellow-800'
+                                    }">
+                                        ${schedule.paymentStatus}
+                                    </span>
+                                </div>
+                                <div class="flex justify-between text-sm text-gray-600">
+                                    <span>${schedule.hours} ساعة</span>
+                                    <span class="font-bold">${this.formatCurrency(schedule.totalAmount)}</span>
+                                </div>
+                                <div class="mt-2 text-sm">
+                                    <i class="fas fa-tasks text-gray-400 ml-1"></i>
+                                    ${schedule.workType}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                <div class="pt-4 border-t border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-800">المجموع:</span>
+                        <div class="text-right">
+                            <div class="text-lg font-bold text-primary">${totalHours} ساعة</div>
+                            <div class="text-sm font-bold text-green-600">${this.formatCurrency(totalAmount)}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    document.getElementById('schedule-modal').classList.remove('hidden');
+}
+
+addScheduleForDate(dateStr) {
+    document.getElementById('date').value = dateStr;
+    document.getElementById('schedule-modal').classList.add('hidden');
+    
+    window.scrollTo({
+        top: document.getElementById('customer-name').offsetTop - 100,
+        behavior: 'smooth'
+    });
+    
+    document.getElementById('customer-name').focus();
+    this.showToast('تم تعيين التاريخ، أكمل بيانات الجدول');
+    }
     }
     
     handleAddSchedule() {
@@ -1011,6 +1237,134 @@ class MajdulSudan {
         // PWA سيتم إضافتها في نسخة لاحقة
         console.log('PWA جاهزة للتثبيت');
     }
+    // إضافة في نهاية الكلاس MajdulSudan:
+
+generateFinancialReport() {
+    const schedules = this.scheduleManager.getAllSchedules();
+    
+    // إحصائيات الدفع
+    const paymentStats = {
+        paid: 0,
+        pending: 0,
+        partial: 0
+    };
+    
+    let totalPaid = 0;
+    let totalPending = 0;
+    
+    schedules.forEach(schedule => {
+        switch(schedule.paymentStatus) {
+            case 'مدفوع':
+                paymentStats.paid++;
+                totalPaid += schedule.totalAmount;
+                break;
+            case 'آجل':
+                paymentStats.pending++;
+                totalPending += schedule.totalAmount;
+                break;
+            case 'جزئي':
+                paymentStats.partial++;
+                totalPending += (schedule.totalAmount * 0.5); // نفترض أن 50% باقي
+                totalPaid += (schedule.totalAmount * 0.5);
+                break;
+        }
+    });
+    
+    return {
+        totalPaid: this.formatCurrency(totalPaid),
+        totalPending: this.formatCurrency(totalPending),
+        paidCount: paymentStats.paid,
+        pendingCount: paymentStats.pending,
+        partialCount: paymentStats.partial
+    };
+}
+
+showFinancialReport() {
+    const report = this.generateFinancialReport();
+    
+    document.getElementById('modal-content').innerHTML = `
+        <div class="space-y-6">
+            <h3 class="text-xl font-bold text-gray-800 text-center">تقرير الإيرادات</h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green-700">${report.totalPaid}</div>
+                        <div class="text-sm text-green-600 mt-1">إجمالي المدفوع</div>
+                        <div class="text-xs text-green-500 mt-2">${report.paidCount} عملية</div>
+                    </div>
+                </div>
+                
+                <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-red-700">${report.totalPending}</div>
+                        <div class="text-sm text-red-600 mt-1">إجمالي المستحق</div>
+                        <div class="text-xs text-red-500 mt-2">${report.pendingCount + report.partialCount} عملية</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                <h4 class="font-bold text-blue-800 mb-3">تفاصيل الحالات:</h4>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center">
+                            <div class="w-3 h-3 bg-green-500 rounded-full ml-2"></div>
+                            مدفوع بالكامل
+                        </span>
+                        <span class="font-bold">${report.paidCount}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full ml-2"></div>
+                            مدفوع جزئياً
+                        </span>
+                        <span class="font-bold">${report.partialCount}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center">
+                            <div class="w-3 h-3 bg-red-500 rounded-full ml-2"></div>
+                            غير مدفوع
+                        </span>
+                        <span class="font-bold">${report.pendingCount}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button onclick="app.sendPaymentReminders()" 
+                        class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-all">
+                    <i class="fas fa-bell ml-2"></i>
+                    إرسال تذكيرات الدفع
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('schedule-modal').classList.remove('hidden');
+}
+
+sendPaymentReminders() {
+    const schedules = this.scheduleManager.getAllSchedules();
+    const pendingSchedules = schedules.filter(s => s.paymentStatus !== 'مدفوع');
+    
+    if (pendingSchedules.length === 0) {
+        this.showToast('لا توجد مستحقات معلقة');
+        return;
+    }
+    
+    let message = "تذكير بالدفع:\n\n";
+    pendingSchedules.forEach((schedule, index) => {
+        message += `${index + 1}. ${schedule.customerName} - ${this.formatCurrency(schedule.totalAmount)}\n`;
+        message += `   الهاتف: ${schedule.phone}\n\n`;
+    });
+    
+    // محاكاة إرسال التذكيرات
+    console.log('تذكيرات الدفع:', message);
+    
+    // في تطبيق حقيقي، يمكن إرسال رسائل SMS أو WhatsApp
+    this.showToast(`تم إرسال ${pendingSchedules.length} تذكير دفع`);
+        }
 }
 
 // تشغيل التطبيق عندما يتم تحميل الصفحة
