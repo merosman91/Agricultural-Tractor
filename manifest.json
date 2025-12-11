@@ -1,0 +1,10 @@
+{
+  "name": "مجدول السودان",
+  "short_name": "مجدول",
+  "description": "تطبيق جدولة ساعات الجرار الزراعي في السودان",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a4d2e",
+  "theme_color": "#1a4d2e",
+  "icons": []
+}
