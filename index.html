@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar-SD" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a4d2e">
+    <title>مجدول السودان - جدولة ساعات الجرار الزراعي</title>
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="assets/images/icon-192.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS المخصص -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/utils.css">
+    
+    <!-- إعداد Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a4d2e',          // أخضر سوداني
+                        'primary-light': '#2e7d32',
+                        'primary-dark': '#0d3b1e',
+                        secondary: '#d4af37',        // ذهبي سوداني
+                        accent: '#8b4513',           // بني تربة
+                        'accent-light': '#a0522d',
+                        sudan: '#d21034',            // أحمر علم السودان
+                    },
+                    fontFamily: {
+                        'cairo': ['Cairo', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'sudan': '0 4px 14px 0 rgba(210, 16, 52, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-b from-gray-50 to-green-50 min-h-screen font-cairo">
+    
+    <!-- الهيدر -->
+    <header id="header"></header>
+    
+    <!-- المحتوى الرئيسي -->
+    <main class="container mx-auto px-4 py-6 pb-28">
+        <!-- إحصائيات سريعة -->
+        <section id="stats-section"></section>
+        
+        <!-- التاريخ السوداني -->
+        <section id="sudan-date-section"></section>
+        
+        <!-- نموذج إضافة جدول -->
+        <section id="add-schedule-section"></section>
+        
+        <!-- الفصول الزراعية السودانية -->
+        <section id="sudan-seasons-section"></section>
+        
+        <!-- قائمة الجداول -->
+        <section id="schedules-section"></section>
+    </main>
+    
+    <!-- زر فلوتر -->
+    <div id="floating-btn"></div>
+    
+    <!-- الناف بار السفلي -->
+    <nav id="bottom-nav"></nav>
+    
+    <!-- المودالات -->
+    <div id="modals-container"></div>
+    
+    <!-- الـ Toast -->
+    <div id="toast-container"></div>
+    
+    <!-- تحميل JavaScript -->
+    <script src="assets/js/hijri-converter.js"></script>
+    <script src="assets/js/sudan-calendar.js"></script>
+    <script src="assets/js/schedule-manager.js"></script>
+    <script src="assets/js/pwa-handler.js"></script>
+    <script src="assets/js/app.js" type="module"></script>
+    
+</body>
+</html>
