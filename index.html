@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a4d2e">
-    <title>مجدول السودان - جدولة ساعات الجرار الزراعي</title>
+    <title>المجدول - تطبيق جدولة الجرار الزراعي</title>
     
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="assets/images/icon-192.png">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,97 +15,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- CSS المخصص -->
-    <style>
-        :root {
-            --primary-green: #1a4d2e;
-            --sudan-red: #d21034;
-            --sudan-gold: #d4af37;
-            --soil-brown: #8b4513;
-            --nile-blue: #1e90ff;
-        }
-        
-        * {
-            font-family: 'Cairo', sans-serif;
-        }
-        
-        /* تصميم كروت السودان */
-        .sudan-card {
-            border: 2px solid var(--primary-green);
-            border-radius: 16px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fff9 100%);
-            transition: all 0.3s ease;
-        }
-
-        .sudan-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(26, 77, 46, 0.15);
-            border-color: var(--sudan-gold);
-        }
-
-        /* زر السودان */
-        .sudan-btn {
-            background: linear-gradient(135deg, var(--primary-green) 0%, #0d3b1e 100%);
-            border: none;
-            color: white;
-            font-weight: 600;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sudan-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(26, 77, 46, 0.3);
-        }
-
-        /* شريط التنقل السوداني */
-        .sudan-nav {
-            background: linear-gradient(135deg, var(--primary-green) 0%, #0d3b1e 100%);
-            box-shadow: 0 -4px 20px rgba(26, 77, 46, 0.2);
-        }
-
-        /* تخصيص شريط التمرير */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-green);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #0d3b1e;
-        }
-
-        /* تأثيرات النصوص */
-        .text-sudan {
-            background: linear-gradient(135deg, var(--primary-green) 0%, var(--sudan-gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* تخصيص حقول الإدخال */
-        .sudan-input {
-            border: 2px solid #d1d5db;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .sudan-input:focus {
-            border-color: var(--primary-green);
-            box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.1);
-            outline: none;
-        }
-        
-        /* إعداد Tailwind */
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <!-- إعداد Tailwind -->
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -123,91 +35,66 @@
                 }
             }
         }
-    </style>
+    </script>
 </head>
 <body class="bg-gradient-to-b from-gray-50 to-green-50 min-h-screen font-cairo">
     
     <!-- الهيدر -->
-    <header class="bg-gradient-to-l from-primary to-primary-dark text-white sticky top-0 z-50 shadow-lg">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3 space-x-reverse">
-                    <div class="bg-white p-2 rounded-full">
-                        <i class="fas fa-tractor text-primary text-xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold">مجدول السودان</h1>
-                        <p class="text-sm text-white/80">الولاية الشمالية - الجرار الزراعي</p>
-                    </div>
-                </div>
-                
-                <div class="flex items-center space-x-4 space-x-reverse">
-                    <button id="region-toggle" class="px-3 py-1 bg-white/20 rounded-lg text-sm hover:bg-white/30 transition-all">
-                        <i class="fas fa-map-marker-alt ml-1"></i>
-                        الشمالية
-                    </button>
-                    <button id="theme-toggle" class="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-all">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                    <button id="install-btn" class="hidden px-3 py-1 bg-white text-primary font-semibold rounded-lg hover:bg-gray-100 transition-all">
-                        <i class="fas fa-download ml-1"></i>
-                        تثبيت
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
+    <div id="header"></div>
+    
     <!-- المحتوى الرئيسي -->
     <main class="container mx-auto px-4 py-6 pb-28">
         <!-- إحصائيات سريعة -->
-        <div id="stats-section" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <!-- سيتم تعبئتها بواسطة JavaScript -->
-        </div>
+        <div id="stats-section"></div>
         
         <!-- التاريخ السوداني -->
-        <div id="sudan-date-section" class="mb-6">
-            <!-- سيتم تعبئتها بواسطة JavaScript -->
-        </div>
+        <div id="sudan-date-section"></div>
         
         <!-- نموذج إضافة جدول -->
-        <div id="add-schedule-section">
-            <!-- سيتم تعبئتها بواسطة JavaScript -->
-        </div>
-        
-        <!-- الفصول الزراعية السودانية -->
-        <div id="sudan-seasons-section" class="my-8">
-            <!-- سيتم تعبئتها بواسطة JavaScript -->
-        </div>
+        <div id="add-schedule-section"></div>
         
         <!-- قائمة الجداول -->
-        <div id="schedules-section">
-            <!-- سيتم تعبئتها بواسطة JavaScript -->
-        </div>
+        <div id="schedules-section"></div>
+        
+        <!-- تقارير العملاء (مخفي افتراضياً) -->
+        <div id="customer-reports-section" class="hidden"></div>
+        
+        <!-- التقارير المالية (مخفي افتراضياً) -->
+        <div id="financial-reports-section" class="hidden"></div>
     </main>
     
     <!-- زر فلوتر -->
-    <button id="quick-add-btn" class="fixed bottom-24 left-6 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center text-2xl shadow-lg hover:bg-primary-dark transition-all z-40">
-        <i class="fas fa-plus"></i>
-    </button>
+    <div id="floating-btn"></div>
     
     <!-- الناف بار السفلي -->
-    <nav id="bottom-nav" class="fixed bottom-0 w-full py-3 px-2 z-40" style="background: linear-gradient(135deg, #1a4d2e 0%, #0d3b1e 100%);">
-        <!-- سيتم تعبئتها بواسطة JavaScript -->
-    </nav>
+    <div id="bottom-nav"></div>
     
     <!-- المودالات -->
-    <div id="modals-container">
-        <!-- سيتم تعبئتها بواسطة JavaScript -->
-    </div>
+    <div id="modals-container"></div>
     
-    <!-- الـ Toast -->
-    <div id="toast-container">
-        <!-- سيتم تعبئتها بواسطة JavaScript -->
-    </div>
-
-    <!-- تحميل جميع ملفات JavaScript في ملف واحد -->
-    <script src="assets/js/majdul-sudan.js"></script>
+    <!-- تحميل جميع ملفات JavaScript -->
+    <!-- Modules -->
+    <script src="assets/js/modules/ScheduleManager.js"></script>
+    <script src="assets/js/modules/SudanCalendar.js"></script>
+    <script src="assets/js/modules/CustomerReport.js"></script>
+    <script src="assets/js/modules/FinancialReport.js"></script>
+    <script src="assets/js/modules/ExportService.js"></script>
+    
+    <!-- Utils -->
+    <script src="assets/js/utils/CurrencyFormatter.js"></script>
+    <script src="assets/js/utils/DateHelper.js"></script>
+    <script src="assets/js/utils/StorageManager.js"></script>
+    
+    <!-- Components -->
+    <script src="assets/js/components/Header.js"></script>
+    <script src="assets/js/components/Stats.js"></script>
+    <script src="assets/js/components/AddScheduleForm.js"></script>
+    <script src="assets/js/components/ScheduleList.js"></script>
+    <script src="assets/js/components/CustomerReports.js"></script>
+    <script src="assets/js/components/BottomNav.js"></script>
+    
+    <!-- App الرئيسي -->
+    <script src="assets/js/app.js"></script>
     
 </body>
-  </html>
+        </html>
